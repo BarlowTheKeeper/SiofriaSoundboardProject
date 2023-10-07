@@ -59,5 +59,35 @@ namespace SiofriaSoundboard.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _1486147197_social_media_circled_network04_79460 {
+            get {
+                object obj = ResourceManager.GetObject("_1486147197_social_media_circled_network04_79460", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _61e1116779fc0a9bd5bdbcc7_Frame_6 {
+            get {
+                object obj = ResourceManager.GetObject("_61e1116779fc0a9bd5bdbcc7_Frame_6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BarlowKeepLogo {
+            get {
+                object obj = ResourceManager.GetObject("BarlowKeepLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

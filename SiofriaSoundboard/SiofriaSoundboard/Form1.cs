@@ -172,7 +172,7 @@ namespace SiofriaSoundboard
 
             e.Cancel = (result == DialogResult.No);
 
-            if(result == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 keepAliveTimer.Stop();
                 inputManager.StopAllInputProcesses();
@@ -436,7 +436,7 @@ namespace SiofriaSoundboard
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(soundBindings.Count > 0)
+            if (soundBindings.Count > 0)
             {
                 DialogResult dialogResult = MessageBox.Show("Do you want to save before creating a new file?", "Save?", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
@@ -454,6 +454,21 @@ namespace SiofriaSoundboard
             saveFilePath = "";
             splitContainer1.Panel2.Controls.Clear();
             lastPress_color = null;
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                splitContainer1.Panel2.Controls.Clear();
+                splitContainer1.Panel2.Controls.Add(new AboutMe());
+                splitContainer1.Panel2.Refresh();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("It seems there was an error opening the About me page\n...well...If that is the will of The Lake...so be it.");
+                Log.Write(exc);
+            }
         }
     }
 }
