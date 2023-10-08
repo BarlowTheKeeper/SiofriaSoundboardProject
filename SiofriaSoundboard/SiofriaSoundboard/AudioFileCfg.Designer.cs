@@ -39,6 +39,7 @@
             tb_fadeout = new TextBox();
             tb_fadein = new TextBox();
             gr_range = new GroupBox();
+            label2 = new Label();
             label6 = new Label();
             cb_cut_enabled = new CheckBox();
             tb_end = new TextBox();
@@ -53,7 +54,6 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             button1 = new Button();
             tableLayoutPanel2 = new TableLayoutPanel();
-            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)tracker_volume).BeginInit();
             groupBox1.SuspendLayout();
             gr_range.SuspendLayout();
@@ -188,6 +188,15 @@
             gr_range.Text = "Cut range";
             gr_range.Enter += groupBox2_Enter;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(81, 68);
+            label2.Name = "label2";
+            label2.Size = new Size(13, 15);
+            label2.TabIndex = 17;
+            label2.Text = "S";
+            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -258,6 +267,9 @@
             groupBox2.TabIndex = 9;
             groupBox2.TabStop = false;
             groupBox2.Text = "File";
+            groupBox2.DragDrop += groupBox2_DragDrop;
+            groupBox2.DragEnter += groupBox2_DragEnter;
+            groupBox2.Enter += groupBox2_Enter_1;
             // 
             // groupBox3
             // 
@@ -285,10 +297,10 @@
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Controls.Add(groupBox2, 0, 1);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 3);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 0);
             tableLayoutPanel1.Controls.Add(groupBox3, 0, 2);
-            tableLayoutPanel1.Controls.Add(groupBox2, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -344,15 +356,6 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Size = new Size(527, 103);
             tableLayoutPanel2.TabIndex = 0;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(81, 68);
-            label2.Name = "label2";
-            label2.Size = new Size(13, 15);
-            label2.TabIndex = 17;
-            label2.Text = "S";
             // 
             // AudioFileCfg
             // 

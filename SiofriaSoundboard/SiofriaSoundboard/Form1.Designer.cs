@@ -44,13 +44,13 @@
             exportToolStripMenuItem = new ToolStripMenuItem();
             viewToolStripMenuItem = new ToolStripMenuItem();
             alwaysOnOpToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             keepAliveTimer = new System.Windows.Forms.Timer(components);
             fileCheckTimer = new System.Windows.Forms.Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
             cb_Play = new CheckBox();
             saveFileDialog1 = new SaveFileDialog();
-            toolStripMenuItem1 = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -99,7 +99,7 @@
             dataGridView1.RowTemplate.ReadOnly = true;
             dataGridView1.RowTemplate.Resizable = DataGridViewTriState.True;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(236, 497);
+            dataGridView1.Size = new Size(236, 417);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellClick += dataGridView1_CellContentClick;
             // 
@@ -195,9 +195,16 @@
             // alwaysOnOpToolStripMenuItem
             // 
             alwaysOnOpToolStripMenuItem.Name = "alwaysOnOpToolStripMenuItem";
-            alwaysOnOpToolStripMenuItem.Size = new Size(180, 22);
+            alwaysOnOpToolStripMenuItem.Size = new Size(152, 22);
             alwaysOnOpToolStripMenuItem.Text = "Always On Top";
             alwaysOnOpToolStripMenuItem.Click += alwaysOnOpToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(52, 21);
+            toolStripMenuItem1.Text = "About";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // keepAliveTimer
             // 
@@ -264,13 +271,6 @@
             cb_Play.Text = "Play!";
             cb_Play.UseVisualStyleBackColor = true;
             cb_Play.CheckedChanged += cb_Play_CheckedChanged;
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(52, 21);
-            toolStripMenuItem1.Text = "About";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // Form1
             // 
