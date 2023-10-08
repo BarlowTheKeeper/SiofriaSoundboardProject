@@ -364,6 +364,9 @@ namespace SiofriaSoundboard
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 string clipSource = ((SoundClip)row.Cells[1].Value).Filepath;
+                if (clipSource.Length == 0)
+                    continue;
+
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
