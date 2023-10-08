@@ -83,6 +83,7 @@
             tracker_volume.Name = "tracker_volume";
             tracker_volume.Size = new Size(450, 45);
             tracker_volume.TabIndex = 1;
+            tracker_volume.Value = 100;
             tracker_volume.Scroll += tracker_volume_Scroll;
             // 
             // cb_fadeout

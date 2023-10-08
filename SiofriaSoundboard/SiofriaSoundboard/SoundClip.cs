@@ -16,7 +16,7 @@ namespace SiofriaSoundboard
     {
         public string Filepath { get; set; } = "";
 
-        public float Volume {get; set;}
+        public float Volume { get; set; } = 1.0f;
         public bool Loop {get; set;}
 
         public bool FadeInEnabled {get; set;}
@@ -119,6 +119,7 @@ namespace SiofriaSoundboard
         }
 
         public override string ToString() => Path.GetFileName(Filepath);
+        
 
         public object Clone()
         {
