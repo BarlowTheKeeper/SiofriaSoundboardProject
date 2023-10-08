@@ -30,6 +30,7 @@ namespace SiofriaSoundboard
 
         private WaveOut waveOut = null;
 
+
         public void Play()
         {
             if (waveOut != null && (waveOut.PlaybackState == PlaybackState.Playing))
@@ -55,25 +56,35 @@ namespace SiofriaSoundboard
             {
                 file = Fade(file, totalTime);
             }
-            if(Loop)
+
+            VolumeSampleProvider volume = new VolumeSampleProvider(file);
+            volume.Volume = Volume;
+
+            if (Loop)
             {
-                var waveProvider = file.ToWaveProvider();
+                var waveProvider = volume.ToWaveProvider();
                 var memoryStream = new MemoryStream();
                 WaveFileWriter.WriteWavFileToStream(memoryStream, waveProvider);
                 memoryStream.Position = 0; // Important for WaveFileReader to be able to read the header chunk bytes
                 var waveReader = new WaveFileReader(memoryStream);
                 LoopStream loopy = new LoopStream(waveReader);
-
                 waveOut.Init(loopy);
             }
             else
             {
-                waveOut.Init(file);
+                waveOut.Init(volume);
             }
-            waveOut.Volume = Volume;
+
             waveOut.Play();
         }
 
+        public void AddOnPlayBackStop(EventHandler<StoppedEventArgs> callback)
+        {
+            if (waveOut == null)
+                return;
+
+            waveOut.PlaybackStopped += callback;
+        }
 
         private DelayFadeOutSampleProvider Fade(ISampleProvider sample, TimeSpan totalTime)
         {

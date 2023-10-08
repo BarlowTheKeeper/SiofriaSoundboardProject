@@ -51,6 +51,7 @@
             tableLayoutPanel2 = new TableLayoutPanel();
             cb_Play = new CheckBox();
             saveFileDialog1 = new SaveFileDialog();
+            timercolor = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -272,6 +273,11 @@
             cb_Play.UseVisualStyleBackColor = true;
             cb_Play.CheckedChanged += cb_Play_CheckedChanged;
             // 
+            // timercolor
+            // 
+            timercolor.Enabled = true;
+            timercolor.Tick += timercolor_Tick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -323,5 +329,6 @@
         private ToolStripMenuItem importToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Timer timercolor;
     }
 }

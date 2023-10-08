@@ -89,9 +89,10 @@ namespace SiofriaSoundboard
             if (cb_Play.Checked)
             {
                 SoundClip clip = soundBindings.GetValue(key);
-                if (clip.IsPlaying() && (getCurrentSettingWindowClip() == clip))
+                if (clip.IsPlaying())
                     clip.Stop();
-                else
+
+                else if (!(clip.Filepath.Length == 0))
                     clip.Play();
             }
 
@@ -468,6 +469,19 @@ namespace SiofriaSoundboard
             {
                 MessageBox.Show("It seems there was an error opening the About me page\n...well...If that is the will of The Lake...so be it.");
                 Log.Write(exc);
+            }
+        }
+
+        private void timercolor_Tick(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                Color c = dataGridView1.Rows[0].InheritedStyle.ForeColor;
+                if (((SoundClip)row.Cells[1].Value).IsPlaying())
+                    c = Color.Red;
+
+                row.Cells[0].Style.ForeColor = c;
+                row.Cells[1].Style.ForeColor = c;
             }
         }
     }
