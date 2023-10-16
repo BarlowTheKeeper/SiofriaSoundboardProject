@@ -7,6 +7,7 @@ using SiofriaSoundboard.Utils;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
+using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Windows.Forms;
 using static System.Windows.Forms.DataFormats;
@@ -371,17 +372,37 @@ namespace SiofriaSoundboard
 
         private void CopyAllAudioFilesToExportDir(string path)
         {
+            List<string> failedFiles = new List<string>();
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                string clipSource = ((SoundClip)row.Cells[1].Value).Filepath;
-                if (clipSource.Length == 0)
+                SoundClip src = ((SoundClip)row.Cells[1].Value);
+                string clipSource = src.Filepath;
+
+                if (clipSource.Length == 0 )
+                    continue;
+
+                if (!clipSource.Contains(".mp3") && !clipSource.Contains(".wav"))
                     continue;
 
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
                 string clipDest = Path.Combine(path, Path.GetFileName(clipSource));
-                File.Copy(clipSource, clipDest, true);
+
+                try
+                {
+                    File.Copy(clipSource, clipDest, true);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(ex);
+                    failedFiles.Add(src.ToString());
+                }
+            }
+
+            if(failedFiles.Count > 0)
+            {
+                MessageBox.Show("These files failed to export [check the logs]: \n" + String.Join(", ", failedFiles.ToArray()));
             }
         }
 
@@ -419,12 +440,28 @@ namespace SiofriaSoundboard
                 try
                 {
                     if (Directory.Exists(packagePath))
+                    {
                         Directory.Delete(packagePath, true);
+                    }
                 }
                 catch (Exception ex)
                 {
                     Log.Write(ex);
                 }
+            }
+        }
+
+        public void RecurseReadOnlyFalse(DirectoryInfo directory)
+        {
+            foreach (FileInfo fi in directory.GetFiles())
+            {
+                fi.IsReadOnly = false; // or true
+                fi.Attributes = FileAttributes.Normal;
+            }
+
+            foreach (DirectoryInfo subdir in directory.GetDirectories())
+            {
+                RecurseReadOnlyFalse(subdir);
             }
         }
 
@@ -442,6 +479,7 @@ namespace SiofriaSoundboard
             {
                 string packageArchive = openFileDialog1.FileName;
                 ZipFile.ExtractToDirectory(packageArchive, packageExtractionPath, true);
+
                 saveFilePath = Path.Combine(packageExtractionPath, exportPackageName, exportConfigName);
                 LoadFile();
             }
