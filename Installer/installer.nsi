@@ -6,7 +6,7 @@
 Outfile "Soundboard of Siofria.exe"
 
 ; The default installation directory
-InstallDir $PROGRAMFILES\BarlowKeep\SoundboardOfSiofria
+InstallDir $LOCALAPPDATA\BarlowKeep\SoundboardOfSiofria
 
 ; The text to prompt the user for the installation directory
 DirText "Please select the installation folder."
