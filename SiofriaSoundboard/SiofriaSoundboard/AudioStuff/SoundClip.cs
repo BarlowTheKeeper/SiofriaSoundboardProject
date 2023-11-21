@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualBasic.Devices;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using Newtonsoft.Json;
+using SiofriaSoundboard.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,10 +16,13 @@ namespace SiofriaSoundboard.AudioStuff
 {
     public class SoundClip : ICloneable
     {
+        static LoopingFadeOutManager fadeoutManager = new LoopingFadeOutManager(100);
+
         public string Filepath { get; set; } = "";
 
         public float Volume { get; set; } = 1.0f;
         public bool Loop { get; set; }
+        public bool Stream { get; set; } = true;
 
         public bool FadeInEnabled { get; set; }
         public bool FadeOutEnabled { get; set; }
@@ -29,7 +34,50 @@ namespace SiofriaSoundboard.AudioStuff
         public bool CutRangeEnabled { get; set; }
 
         private WaveOut waveOut = null;
+        private VolumeSampleProvider volumeSampler;
+        private MemoryStream inmemoryStream = null;
 
+        public VolumeSampleProvider GetVolumeSampleProvider()
+        {
+            return volumeSampler;
+        }
+
+        private ISampleProvider PlayLooping(WaveStream file)
+        {
+            ISampleProvider output = file.ToSampleProvider();
+            LoopStream loopy = new LoopStream(file);
+
+            if(CutRangeEnabled)
+            {
+                //Not supported yet for looping files
+            }
+
+            if (FadeInEnabled)
+            {
+            }
+
+            return loopy.ToSampleProvider();
+        }
+
+        private ISampleProvider PlayOnce(WaveStream file)
+        {
+            ISampleProvider output = file.ToSampleProvider();
+            TimeSpan totalTime = file.TotalTime;
+
+            if (CutRangeEnabled)
+            {
+                output = TrimAudio(output, totalTime);
+                totalTime -= TimeSpan.FromMilliseconds(CutRangeBegin * 1000.0f);
+
+                if (CutRangeTake > 0)
+                    totalTime = TimeSpan.FromMilliseconds((CutRangeTake > totalTime.TotalSeconds ? totalTime.TotalSeconds : CutRangeTake) * 1000.0f);
+            }
+
+            if (FadeInEnabled || FadeOutEnabled)
+                output = Fade(output, totalTime);
+
+            return output;
+        }
 
         public void Play()
         {
@@ -39,46 +87,47 @@ namespace SiofriaSoundboard.AudioStuff
             if (Filepath.Length == 0 || !File.Exists(Filepath))
                 return;
 
-            waveOut = new();
-            ISampleProvider file = new AudioFileReader(Filepath);
-
-            TimeSpan totalTime = ((AudioFileReader)file).TotalTime;
-            if (CutRangeEnabled)
+            try
             {
-                file = TrimAudio(file, totalTime);
-                totalTime -= TimeSpan.FromMilliseconds(CutRangeBegin * 1000.0f);
+                waveOut = new();
 
-                if (CutRangeTake > 0)
-                    totalTime = TimeSpan.FromMilliseconds((CutRangeTake > totalTime.TotalSeconds ? totalTime.TotalSeconds : CutRangeTake) * 1000.0f);
+                WaveStream stream;
+                if(Stream)
+                    stream = new AudioFileReader(Filepath);
+                else
+                {
+                    if (inmemoryStream == null)
+                    {
+                        inmemoryStream = new MemoryStream();
+                        WaveFileWriter.WriteWavFileToStream(inmemoryStream, new AudioFileReader(Filepath));
+                        
+                    }
+                    inmemoryStream.Position = 0;
+                    stream = new WaveFileReader(inmemoryStream);
+                }
+
+                ISampleProvider output;
+                if (Loop)
+                    output = PlayLooping(stream);
+                else
+                    output = PlayOnce(stream);
+
+
+                MarksSoftLimiter limiterOut = new MarksSoftLimiter(output);
+                limiterOut.Boost.CurrentValue = 5.9f;
+
+                volumeSampler = new VolumeSampleProvider(limiterOut);
+                volumeSampler.Volume = Volume;
+
+                waveOut.Init(volumeSampler);
+                waveOut.Play();
+
             }
-
-            if (FadeInEnabled || FadeOutEnabled)
+            catch (Exception ex)
             {
-                file = Fade(file, totalTime);
+                MessageBox.Show("Audio playback failed, check the logs");
+                Log.Write("Error playing clip: " + ex + " CLIP INFO: " + DumpSoundClipInfo());
             }
-
-            MarksSoftLimiter limiterOut = new MarksSoftLimiter(file);
-            limiterOut.Boost.CurrentValue = 5.9f;
-
-            VolumeSampleProvider volume = new VolumeSampleProvider(limiterOut);
-            volume.Volume = Volume;
-
-            if (Loop)
-            {
-                var waveProvider = volume.ToWaveProvider();
-                var memoryStream = new MemoryStream();
-                WaveFileWriter.WriteWavFileToStream(memoryStream, waveProvider);
-                memoryStream.Position = 0; // Important for WaveFileReader to be able to read the header chunk bytes
-                var waveReader = new WaveFileReader(memoryStream);
-                LoopStream loopy = new LoopStream(waveReader);
-                waveOut.Init(loopy);
-            }
-            else
-            {
-                waveOut.Init(volume);
-            }
-
-            waveOut.Play();
         }
 
         public void AddOnPlayBackStop(EventHandler<StoppedEventArgs> callback)
@@ -122,7 +171,22 @@ namespace SiofriaSoundboard.AudioStuff
             if (waveOut.PlaybackState == PlaybackState.Stopped)
                 return;
 
+            if(Loop && FadeOutEnabled)
+            {
+                fadeoutManager.QueueClipForFadeout(this);
+                return;
+            }
+
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (waveOut == null)
+                return;
+
             waveOut.Stop();
+            waveOut.Dispose();
         }
 
         public bool IsPlaying()
@@ -134,6 +198,10 @@ namespace SiofriaSoundboard.AudioStuff
 
         public override string ToString() => Path.GetFileName(Filepath);
 
+        public string DumpSoundClipInfo()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.None);
+        }
 
         public object Clone()
         {

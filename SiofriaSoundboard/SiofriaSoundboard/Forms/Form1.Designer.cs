@@ -53,6 +53,7 @@
             cb_Play = new CheckBox();
             saveFileDialog1 = new SaveFileDialog();
             timercolor = new System.Windows.Forms.Timer(components);
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -104,6 +105,7 @@
             dataGridView1.Size = new Size(236, 417);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellClick += dataGridView1_CellContentClick;
+            dataGridView1.KeyDown += dataGridView1_KeyDown;
             // 
             // statusStrip1
             // 
@@ -272,6 +274,7 @@
             button1.Size = new Size(70, 25);
             button1.TabIndex = 3;
             button1.Text = "STOP!";
+            toolTip1.SetToolTip(button1, "Stop all playback [backspace on soundboard]");
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -288,6 +291,7 @@
             cb_Play.Size = new Size(48, 25);
             cb_Play.TabIndex = 2;
             cb_Play.Text = "Play!";
+            toolTip1.SetToolTip(cb_Play, "Toggle to enable soundboard mode");
             cb_Play.UseVisualStyleBackColor = true;
             cb_Play.CheckedChanged += cb_Play_CheckedChanged;
             // 
@@ -350,5 +354,6 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Timer timercolor;
         private Button button1;
+        private ToolTip toolTip1;
     }
 }

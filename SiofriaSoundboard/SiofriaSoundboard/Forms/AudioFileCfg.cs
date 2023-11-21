@@ -35,6 +35,7 @@ namespace SiofriaSoundboard
             clip.FadeInEnabled = cb_fadein.Checked;
             clip.FadeOutEnabled = cb_fadeout.Checked;
             clip.Loop = cb_loop.Checked;
+            clip.Stream = cb_stream.Checked;
 
             try
             {
@@ -58,7 +59,7 @@ namespace SiofriaSoundboard
             cb_fadein.Checked = clip.FadeInEnabled;
             cb_fadeout.Checked = clip.FadeOutEnabled;
             cb_loop.Checked = clip.Loop;
-
+            cb_stream.Checked = clip.Stream;
             tb_start.Text = clip.CutRangeBegin.ToString();
             tb_end.Text = clip.CutRangeTake.ToString();
             tb_fadein.Text = clip.FadeInAmount.ToString();
@@ -67,7 +68,27 @@ namespace SiofriaSoundboard
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            if (cb_loop.Checked) //disable unsupported combinations of settings
+            {
+                clip.CutRangeEnabled = false;
+                clip.FadeInEnabled = false;
+                cb_cut_enabled.Enabled = false;
+                cb_fadein.Enabled = false;
+                tb_start.Enabled = false;
+                tb_end.Enabled = false;
+                tb_fadein.Enabled = false;
+            }
+            else
+            {
+                clip.CutRangeEnabled = cb_cut_enabled.Checked;
+                clip.FadeInEnabled = cb_fadein.Checked;
 
+                cb_cut_enabled.Enabled = true;
+                cb_fadein.Enabled = true;
+                tb_start.Enabled = true;
+                tb_end.Enabled = true;
+                tb_fadein.Enabled = true;
+            }
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -207,6 +228,16 @@ namespace SiofriaSoundboard
                 e.Effect = DragDropEffects.Copy; // Okay
             else
                 e.Effect = DragDropEffects.None; // Unknown data, ignore it
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cb_stream_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

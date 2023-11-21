@@ -68,6 +68,7 @@ namespace SiofriaSoundboard.AudioStuff
                 paramsChanged = false;
             }
             var samplesAvailable = source.Read(samples, offset, count);
+
             Block(samplesAvailable);
             if (WaveFormat.Channels == 1)
             {

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             cb_loop = new CheckBox();
             tracker_volume = new TrackBar();
             cb_fadeout = new CheckBox();
@@ -54,6 +55,9 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             button1 = new Button();
             tableLayoutPanel2 = new TableLayoutPanel();
+            toolTip1 = new ToolTip(components);
+            groupBox4 = new GroupBox();
+            cb_stream = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)tracker_volume).BeginInit();
             groupBox1.SuspendLayout();
             gr_range.SuspendLayout();
@@ -62,13 +66,14 @@
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // cb_loop
             // 
             cb_loop.Anchor = AnchorStyles.None;
             cb_loop.AutoSize = true;
-            cb_loop.Location = new Point(226, 42);
+            cb_loop.Location = new Point(41, 31);
             cb_loop.Name = "cb_loop";
             cb_loop.Size = new Size(53, 19);
             cb_loop.TabIndex = 0;
@@ -254,6 +259,7 @@
             bt_preview.Size = new Size(92, 42);
             bt_preview.TabIndex = 0;
             bt_preview.Text = "Apply";
+            toolTip1.SetToolTip(bt_preview, "Apply changes [Enter on soundboard]");
             bt_preview.UseVisualStyleBackColor = true;
             bt_preview.Click += button1_Click;
             // 
@@ -349,14 +355,39 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45.0920258F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
             tableLayoutPanel2.Controls.Add(groupBox1, 0, 0);
-            tableLayoutPanel2.Controls.Add(cb_loop, 1, 0);
             tableLayoutPanel2.Controls.Add(gr_range, 2, 0);
+            tableLayoutPanel2.Controls.Add(groupBox4, 1, 0);
             tableLayoutPanel2.Location = new Point(3, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Size = new Size(527, 103);
             tableLayoutPanel2.TabIndex = 0;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(cb_stream);
+            groupBox4.Controls.Add(cb_loop);
+            groupBox4.Location = new Point(182, 3);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(141, 97);
+            groupBox4.TabIndex = 8;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Playback";
+            groupBox4.Enter += groupBox4_Enter;
+            // 
+            // cb_stream
+            // 
+            cb_stream.AutoSize = true;
+            cb_stream.Checked = true;
+            cb_stream.CheckState = CheckState.Checked;
+            cb_stream.Location = new Point(41, 63);
+            cb_stream.Name = "cb_stream";
+            cb_stream.Size = new Size(63, 19);
+            cb_stream.TabIndex = 1;
+            cb_stream.Text = "Stream";
+            cb_stream.UseVisualStyleBackColor = true;
+            cb_stream.CheckedChanged += cb_stream_CheckedChanged;
             // 
             // AudioFileCfg
             // 
@@ -379,7 +410,8 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -411,5 +443,8 @@
         private Button button1;
         private TextBox tb_end;
         private Label label2;
+        private ToolTip toolTip1;
+        private GroupBox groupBox4;
+        private CheckBox cb_stream;
     }
 }
