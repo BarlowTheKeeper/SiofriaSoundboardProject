@@ -6,7 +6,7 @@ Introducing the **Soundboard Of Siofria**, an application that you configure onc
 In more technical terms: this app allows the user to map the inputs from an external keyboard to certain sounds. These sounds are then played when corresponding keys are pressed, without interfering with the rest of the system.  
 
 ##
-![soundboard](https://github.com/BarlowTheKeeper/SiofriaSoundboardProject/assets/147258093/7d8a103d-4aea-424a-8087-b9e3e08a60b8)
+![soundboard](https://github.com/BarlowTheKeeper/SiofriaSoundboardProject/assets/147258093/c2c82a54-9618-444a-98cb-4c4d7285a483)
 ##
 
 **To install the software follow** [this link](https://github.com/BarlowTheKeeper/SiofriaSoundboardProject/releases/download/v0.0.1/Soundboard.of.Siofria.exe) or click on Releases in the sidebar on the right.
