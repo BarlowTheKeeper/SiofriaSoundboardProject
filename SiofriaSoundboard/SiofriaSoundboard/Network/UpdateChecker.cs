@@ -13,11 +13,11 @@ namespace SiofriaSoundboard.Network
     {
         private static readonly String tag = "v0.0.3";
         private static readonly HttpClient client = new HttpClient();
-
+        public static String Tag { get; } = "v0.0.3";
 
         private static bool CheckRepoVersionBigger(String repoVersion)
         {
-            string version1 = tag.Substring(1);
+            string version1 = Tag.Substring(1);
             string version2 = repoVersion.Substring(1);
 
             // Create Version objects

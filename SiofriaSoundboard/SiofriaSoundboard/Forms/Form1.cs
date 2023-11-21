@@ -50,6 +50,7 @@ namespace SiofriaSoundboard
                 inputManager.OnInput += OnInput;
                 loadLastFile();
                 UpdateChecker.CheckForNewVersionAsync();
+                this.Text += " " + UpdateChecker.Tag;
             }
             catch (Exception exc)
             {
