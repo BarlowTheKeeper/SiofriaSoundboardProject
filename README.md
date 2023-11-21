@@ -69,5 +69,8 @@ Build this as a regular Visual Studio project, copy the artifacts from solution 
 5. A help page inside the app (this should be the first in the list I know!)
 6. Interface with Lifx for light sync with music. (PoC in progress)
 
-Please report any issues you come accross, here on github. You can also attach the application logs so that I can see what the errors were. 
-Logs are located in the place you installed the application at. Look for files with names of this example format: "Log-10-27-2023.txt"
+Keeneyed might have noticed that the end user will get a notification for each new version after this one (multiple versions gap will produce multiple notifications). 
+Also, I will add a "don't show this again" option. That will be fixed in the next one.
+
+Please report any issues you come across, here on Git Hub. You can also attach the application logs so that I can see what the errors were. 
+Logs are located in the place where you installed the application. Look for files with names of this example format: "Log-10-27-2023.txt"
