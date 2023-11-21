@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using SiofriaSoundboard.AudioStuff;
 using SiofriaSoundboard.Input;
+using SiofriaSoundboard.Network;
 using SiofriaSoundboard.Utils;
 using System.ComponentModel;
 using System.IO;
@@ -10,8 +11,10 @@ using System.IO.Compression;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Windows.Forms;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 using static System.Windows.Forms.DataFormats;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace SiofriaSoundboard
@@ -46,6 +49,7 @@ namespace SiofriaSoundboard
                 inputManager = new InputManager("blocked_input.txt", fileCheckTimer);
                 inputManager.OnInput += OnInput;
                 loadLastFile();
+                UpdateChecker.CheckForNewVersionAsync();
             }
             catch (Exception exc)
             {
@@ -54,7 +58,6 @@ namespace SiofriaSoundboard
                 Application.Exit();
             }
         }
-
 
         private void loadLastFile()
         {
@@ -168,7 +171,15 @@ namespace SiofriaSoundboard
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            restartInputProcess();
+            try
+            {
+                restartInputProcess();
+            }
+            catch(Exception exc)
+            {
+                Log.Write(exc);
+                MessageBox.Show("Something went wrong! The problem might resolve itself, but I advise restarting the application.");
+            }
         }
 
         private void status_strip_Click(object sender, EventArgs e)
@@ -303,10 +314,10 @@ namespace SiofriaSoundboard
                     {
                         SoundClip clipClone = (SoundClip)clip.Clone();
                         clipClone.Filepath = Path.Combine(exportAudioPath, Path.GetFileName(clipClone.Filepath));
-                        json = JsonConvert.SerializeObject(clipClone, Formatting.None);
+                        json = clipClone.DumpSoundClipInfo();
                     }
                     else
-                        json = JsonConvert.SerializeObject(clip, Formatting.None);
+                        json = clip.DumpSoundClipInfo();
 
                     writer.WriteLine("[" + key.keycode.ToString() + "][" + key.ToString() + "]:" + json);
                 }
@@ -378,7 +389,7 @@ namespace SiofriaSoundboard
                 SoundClip src = ((SoundClip)row.Cells[1].Value);
                 string clipSource = src.Filepath;
 
-                if (clipSource.Length == 0 )
+                if (clipSource.Length == 0)
                     continue;
 
                 if (!clipSource.Contains(".mp3") && !clipSource.Contains(".wav"))
@@ -400,7 +411,7 @@ namespace SiofriaSoundboard
                 }
             }
 
-            if(failedFiles.Count > 0)
+            if (failedFiles.Count > 0)
             {
                 MessageBox.Show("These files failed to export [check the logs]: \n" + String.Join(", ", failedFiles.ToArray()));
             }
@@ -465,8 +476,31 @@ namespace SiofriaSoundboard
             }
         }
 
+        private void newFile()
+        {
+            if (soundBindings.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show("Do you want to save before creating a new file?", "Save?", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    if (saveFilePath.Length == 0)
+                        SaveAs();
+                    else
+                        Save(saveFilePath);
+                }
+            }
+
+            soundBindings.Clear();
+            soundBindings = new DictionaryBindingList<KeyPress, SoundClip>();
+            dataGridView1.DataSource = soundBindings;
+            saveFilePath = "";
+            splitContainer1.Panel2.Controls.Clear();
+            lastPress_color = null;
+        }
+
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            newFile();
             string packageExtractionPath = new FileInfo(Application.ExecutablePath).Directory.FullName;
 
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -488,24 +522,7 @@ namespace SiofriaSoundboard
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (soundBindings.Count > 0)
-            {
-                DialogResult dialogResult = MessageBox.Show("Do you want to save before creating a new file?", "Save?", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    if (saveFilePath.Length == 0)
-                        SaveAs();
-                    else
-                        Save(saveFilePath);
-                }
-            }
-
-            soundBindings.Clear();
-            soundBindings = new DictionaryBindingList<KeyPress, SoundClip>();
-            dataGridView1.DataSource = soundBindings;
-            saveFilePath = "";
-            splitContainer1.Panel2.Controls.Clear();
-            lastPress_color = null;
+            newFile();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -554,6 +571,20 @@ namespace SiofriaSoundboard
         private void button1_Click(object sender, EventArgs e)
         {
             StopAll();
+        }
+
+        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Delete)
+                return;
+
+            MessageBox.Show("deleting");
+            getCurrentSettingWindow().Dispose();
+            SoundClip clip = (SoundClip)dataGridView1.SelectedRows[0].Cells[1].Value;
+            KeyPress key = (KeyPress)dataGridView1.SelectedRows[0].Cells[0].Value;
+            clip.Dispose();
+            
+            soundBindings.Remove(key);
         }
     }
 }

@@ -62,13 +62,12 @@ When built, both projects produce artifacts in the same dir. (for example `Siofr
 Build this as a regular Visual Studio project, copy the artifacts from solution #1 next to the newly built binaries and you are all set to use/further develop the app.
 
 ## Roadmap & Known Bugs [things I am already working on - not in this particular order :) ]
-1. Bigger files (10+ minutes long) take up to 10s to start playing and sometimes pause all sounds for a short period.
-2. Deleting entries from the table and/or clearing the sound file field for a certain entry.
-3. Fix fade-in/fade-out for non-looping sounds (it has proven much more complicated than I imagined)
-4. Implement proper fade-in/fade-out for looping sounds (only first playback fades in - only last playback fades out)
-5. Import doesn't work if you already have another imported package open. 
-#### WORKAROUND: First do File->New, then go to File->Import
-6. Cuttoff range check & message for the user
-7. Mixer volume view of all sounds (maybe some gain settings) 
-8. A help page inside the app (this should be the first in the list I know!)
-7. Interface with Lifx for light sync with music. (PoC in progress)
+1. Fix fade-in/fade-out for non-looping sounds (it has proven much more complicated than I imagined)
+2. Implement proper fade-in for looping sounds (only first playback fades in - only last playback fades out)
+3. Cuttoff range check & message for the user
+4. Mixer volume view of all sounds (maybe some gain settings) 
+5. A help page inside the app (this should be the first in the list I know!)
+6. Interface with Lifx for light sync with music. (PoC in progress)
+
+Please report any issues you come accross, here on github. You can also attach the application logs so that I can see what the errors were. 
+Logs are located in the place you installed the application at. Look for files with names of this example format: "Log-10-27-2023.txt"
