@@ -159,9 +159,13 @@ namespace SiofriaSoundboard
             if (e.KeyCode != Keys.Delete)
                 return;
 
-            MessageBox.Show("deleting");
-            getCurrentSettingWindow().Dispose();
             SoundClip clip = (SoundClip)dataGridView1.SelectedRows[0].Cells[1].Value;
+
+            DialogResult r = MessageBox.Show("Deleting " + clip, "Are you sure?", MessageBoxButtons.YesNo);
+            if (r == DialogResult.No)
+                return;
+
+            getCurrentSettingWindow().Dispose();
             KeyPress key = (KeyPress)dataGridView1.SelectedRows[0].Cells[0].Value;
             clip.Dispose();
 
