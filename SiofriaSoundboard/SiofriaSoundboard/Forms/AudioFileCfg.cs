@@ -91,69 +91,15 @@ namespace SiofriaSoundboard
             }
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             ApplyValuesToSoundclip();
         }
 
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void AudioFileCfg_Load(object sender, EventArgs e)
         {
             Show();
-        }
-
-        private void cb_fadein_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cb_fadeout_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_fadein_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_fadeout_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cb_cut_enabled_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_start_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_end_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tracker_volume_Scroll(object sender, EventArgs e)
-        {
-
         }
 
         private void bt_browse_Click(object sender, EventArgs e)
@@ -181,11 +127,6 @@ namespace SiofriaSoundboard
             if (clip.IsPlaying())
             { clip.Stop(); }
             else { clip.Play(); }
-        }
-
-        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
-        {
-
         }
 
         internal SoundClip GetSoundClip()
@@ -217,27 +158,12 @@ namespace SiofriaSoundboard
             }
         }
 
-        private void groupBox2_Enter_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void groupBox2_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy; // Okay
             else
                 e.Effect = DragDropEffects.None; // Unknown data, ignore it
-        }
-
-        private void groupBox4_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cb_stream_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
