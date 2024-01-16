@@ -5,7 +5,6 @@ using SiofriaSoundboard.Network;
 using SiofriaSoundboard.Packages;
 using SiofriaSoundboard.Utils;
 using System.ComponentModel;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace SiofriaSoundboard
 {
