@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace SiofriaSoundboard.Packages
 {
-    internal class SoundPackage
+    public class SoundPackage
     {
         private DictionaryBindingList<KeyPress, SoundClip> soundBindings = null;
         //private string config;

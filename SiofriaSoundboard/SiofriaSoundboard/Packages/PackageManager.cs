@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace SiofriaSoundboard.Packages
 {
-    internal class PackageManager
+    public class PackageManager
     {
         private const string packageDirName = "packages";
         private string packagesPath = Path.Combine(new FileInfo(Application.ExecutablePath).Directory.FullName, packageDirName);
@@ -241,6 +241,46 @@ namespace SiofriaSoundboard.Packages
                     Path.GetFileNameWithoutExtension(Current.Config)
                     )
                 + "]";
+        }
+
+        public List<string> GetPackageList()
+        {
+            List<string> directories = new List<string>();
+            foreach (var directory in Directory.EnumerateDirectories(packagesPath, "*", SearchOption.TopDirectoryOnly))
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(directory);
+                directories.Add(dirInfo.Name);
+            }
+            return directories;
+        }
+
+        public bool DeletePackage(string name)
+        {
+            string packageDirName = Path.Combine(packagesPath, name);
+
+            if (Current.Config.Contains(packageDirName) && Current.GetSoundBindings().Count > 0)
+            {
+                 DialogResult dialogResult = MessageBox.Show("You are removing your currently open package?", "Are you sure?", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
+                    return false;
+            }
+
+            if (Directory.Exists(packageDirName))
+                Directory.Delete(packageDirName, true);
+
+            return true;
+        }
+
+        public void LoadPackageByName(string name)
+        {
+            if (Current.GetSoundBindings().Count > 0) //TODO: I can probably move this check for saving to the setter or smth...as it is redundant code
+            {
+                DialogResult dialogResult = MessageBox.Show("Do you want to save before opening another package?", "Save?", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                    Save();
+            }
+
+            Current = new SoundPackage(Path.Combine(packagesPath, name, exportConfigName));
         }
     }
 }

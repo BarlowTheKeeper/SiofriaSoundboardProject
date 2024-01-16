@@ -1,9 +1,11 @@
 using SiofriaSoundboard.AudioStuff;
+using SiofriaSoundboard.Forms;
 using SiofriaSoundboard.Input;
 using SiofriaSoundboard.Network;
 using SiofriaSoundboard.Packages;
 using SiofriaSoundboard.Utils;
 using System.ComponentModel;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace SiofriaSoundboard
 {
@@ -60,6 +62,19 @@ namespace SiofriaSoundboard
             {
                 keepAliveTimer.Stop();
                 inputManager.StopAllInputProcesses();
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AudioFileCfg settings = getCurrentSettingWindow();
+                if (settings == null)
+                    return;
+
+                settings.ApplyValuesToSoundclip();
+                return;
             }
         }
 
@@ -188,7 +203,7 @@ namespace SiofriaSoundboard
             catch { }
         }
 
-        private void refreshDatagridAndPanels()
+        public void refreshDatagridAndPanels()
         {
             dataGridView1.DataSource = packageMgr.Current.GetSoundBindings();
             splitContainer1.Panel2.Controls.Clear();
@@ -298,12 +313,11 @@ namespace SiofriaSoundboard
             keepAliveTimer.Start();
         }
 
-
-        //Strip Clicks
-        private void managePackagesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void manageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Open Form with packages
-            //Open/Delete
+            splitContainer1.Panel2.Controls.Clear();
+            splitContainer1.Panel2.Controls.Add(new PkgMgrWnd(packageMgr, this));
+            splitContainer1.Panel2.Refresh();
         }
 
         private void importToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -359,17 +373,6 @@ namespace SiofriaSoundboard
             TopMost = !TopMost;
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                AudioFileCfg settings = getCurrentSettingWindow();
-                if (settings == null)
-                    return;
 
-                settings.ApplyValuesToSoundclip();
-                return;
-            }
-        }
     }
 }

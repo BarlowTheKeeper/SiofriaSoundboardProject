@@ -179,27 +179,27 @@
             managePackagesToolStripMenuItem.Name = "managePackagesToolStripMenuItem";
             managePackagesToolStripMenuItem.Size = new Size(186, 22);
             managePackagesToolStripMenuItem.Text = "Packages";
-            managePackagesToolStripMenuItem.Click += managePackagesToolStripMenuItem_Click;
             // 
             // importToolStripMenuItem
             // 
             importToolStripMenuItem.Name = "importToolStripMenuItem";
-            importToolStripMenuItem.Size = new Size(117, 22);
+            importToolStripMenuItem.Size = new Size(180, 22);
             importToolStripMenuItem.Text = "Import";
             importToolStripMenuItem.Click += importToolStripMenuItem_Click_1;
             // 
             // exportToolStripMenuItem
             // 
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(117, 22);
+            exportToolStripMenuItem.Size = new Size(180, 22);
             exportToolStripMenuItem.Text = "Export";
             exportToolStripMenuItem.Click += exportToolStripMenuItem_Click_1;
             // 
             // manageToolStripMenuItem
             // 
             manageToolStripMenuItem.Name = "manageToolStripMenuItem";
-            manageToolStripMenuItem.Size = new Size(117, 22);
+            manageToolStripMenuItem.Size = new Size(180, 22);
             manageToolStripMenuItem.Text = "Manage";
+            manageToolStripMenuItem.Click += manageToolStripMenuItem_Click;
             // 
             // viewToolStripMenuItem
             // 
