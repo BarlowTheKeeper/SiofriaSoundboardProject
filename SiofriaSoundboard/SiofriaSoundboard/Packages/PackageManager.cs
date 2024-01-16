@@ -85,7 +85,11 @@ namespace SiofriaSoundboard.Packages
                 if (File.Exists(file))
                     Current = new SoundPackage(file);
             }
-            catch (Exception ex) { Log.Write(ex); }
+            catch (Exception ex) 
+            { 
+                Log.Write(ex);
+                Current = new SoundPackage();
+            }
         }
 
         public void NewPackage()
@@ -222,7 +226,7 @@ namespace SiofriaSoundboard.Packages
             }
         }
 
-        private void SaveToLastFileCache(string configPath)
+        public void SaveToLastFileCache(string configPath)
         {
             using (StreamWriter writer = new StreamWriter(lastSaveFileCache))
             {
@@ -232,15 +236,22 @@ namespace SiofriaSoundboard.Packages
 
         public string GetCurrentPackageName()
         {
-            if (Current.Config.Contains(packagesPath))
-                return Directory.GetParent(Current.Config).Name;
-            
-            return "Packageless Config [" + 
+            try
+            {
+                if (Current.Config.Contains(packagesPath))
+                    return Directory.GetParent(Current.Config).Name;
+
+                return "Packageless Config [" +
                 Path.Combine(
                     Directory.GetParent(Current.Config).Name,
                     Path.GetFileNameWithoutExtension(Current.Config)
                     )
                 + "]";
+
+            }
+            catch { }
+
+            return "Packageless Config";
         }
 
         public List<string> GetPackageList()

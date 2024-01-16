@@ -353,7 +353,36 @@ namespace SiofriaSoundboard
             refreshDatagridAndPanels();
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void alwaysOnOpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TopMost = !TopMost;
+        }
+
+        private void clearCacheToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string execDirectory = new FileInfo(Application.ExecutablePath).Directory.FullName;
+
+                packageMgr.SaveToLastFileCache("");
+                List<string> toRemove = new List<string>(Directory.EnumerateFiles(execDirectory, "Log*"));
+                toRemove.Add(Path.Combine(execDirectory, "blocked_input.txt")); ;
+
+                foreach (var file in toRemove)
+                    if (File.Exists(file))
+                        File.Delete(file);
+
+                MessageBox.Show("Cache Cleared!");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("It seems there was an error clearing the cache!\nDon't worry this shouldn't break anything. Error is in the log.");
+                Log.Write(exc);
+            }
+
+        }
+
+        private void showAboutPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -368,11 +397,9 @@ namespace SiofriaSoundboard
             }
         }
 
-        private void alwaysOnOpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TopMost = !TopMost;
+            UpdateChecker.CheckForNewVersionAsync();
         }
-
-
     }
 }

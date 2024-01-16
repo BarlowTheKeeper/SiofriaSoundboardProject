@@ -46,7 +46,10 @@
             manageToolStripMenuItem = new ToolStripMenuItem();
             viewToolStripMenuItem = new ToolStripMenuItem();
             alwaysOnOpToolStripMenuItem = new ToolStripMenuItem();
+            clearCacheToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
+            showAboutPageToolStripMenuItem = new ToolStripMenuItem();
+            checkForUpdatesToolStripMenuItem = new ToolStripMenuItem();
             keepAliveTimer = new System.Windows.Forms.Timer(components);
             fileCheckTimer = new System.Windows.Forms.Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -183,30 +186,30 @@
             // importToolStripMenuItem
             // 
             importToolStripMenuItem.Name = "importToolStripMenuItem";
-            importToolStripMenuItem.Size = new Size(180, 22);
+            importToolStripMenuItem.Size = new Size(117, 22);
             importToolStripMenuItem.Text = "Import";
             importToolStripMenuItem.Click += importToolStripMenuItem_Click_1;
             // 
             // exportToolStripMenuItem
             // 
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(180, 22);
+            exportToolStripMenuItem.Size = new Size(117, 22);
             exportToolStripMenuItem.Text = "Export";
             exportToolStripMenuItem.Click += exportToolStripMenuItem_Click_1;
             // 
             // manageToolStripMenuItem
             // 
             manageToolStripMenuItem.Name = "manageToolStripMenuItem";
-            manageToolStripMenuItem.Size = new Size(180, 22);
+            manageToolStripMenuItem.Size = new Size(117, 22);
             manageToolStripMenuItem.Text = "Manage";
             manageToolStripMenuItem.Click += manageToolStripMenuItem_Click;
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnOpToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnOpToolStripMenuItem, clearCacheToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(44, 21);
-            viewToolStripMenuItem.Text = "View";
+            viewToolStripMenuItem.Size = new Size(46, 21);
+            viewToolStripMenuItem.Text = "Tools";
             // 
             // alwaysOnOpToolStripMenuItem
             // 
@@ -215,12 +218,33 @@
             alwaysOnOpToolStripMenuItem.Text = "Always On Top";
             alwaysOnOpToolStripMenuItem.Click += alwaysOnOpToolStripMenuItem_Click;
             // 
+            // clearCacheToolStripMenuItem
+            // 
+            clearCacheToolStripMenuItem.Name = "clearCacheToolStripMenuItem";
+            clearCacheToolStripMenuItem.Size = new Size(152, 22);
+            clearCacheToolStripMenuItem.Text = "Clear Cache";
+            clearCacheToolStripMenuItem.Click += clearCacheToolStripMenuItem_Click;
+            // 
             // toolStripMenuItem1
             // 
+            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { showAboutPageToolStripMenuItem, checkForUpdatesToolStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(52, 21);
             toolStripMenuItem1.Text = "About";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+            // 
+            // showAboutPageToolStripMenuItem
+            // 
+            showAboutPageToolStripMenuItem.Name = "showAboutPageToolStripMenuItem";
+            showAboutPageToolStripMenuItem.Size = new Size(180, 22);
+            showAboutPageToolStripMenuItem.Text = "Show About Page";
+            showAboutPageToolStripMenuItem.Click += showAboutPageToolStripMenuItem_Click;
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            checkForUpdatesToolStripMenuItem.Size = new Size(180, 22);
+            checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
+            checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
             // 
             // keepAliveTimer
             // 
@@ -368,5 +392,8 @@
         private ToolStripMenuItem manageToolStripMenuItem;
         private ToolStripMenuItem importToolStripMenuItem;
         private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripMenuItem clearCacheToolStripMenuItem;
+        private ToolStripMenuItem showAboutPageToolStripMenuItem;
+        private ToolStripMenuItem checkForUpdatesToolStripMenuItem;
     }
 }
