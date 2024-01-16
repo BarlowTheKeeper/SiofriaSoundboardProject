@@ -1,43 +1,25 @@
-using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.VisualBasic.Devices;
-using Newtonsoft.Json;
 using SiofriaSoundboard.AudioStuff;
 using SiofriaSoundboard.Input;
 using SiofriaSoundboard.Network;
+using SiofriaSoundboard.Packages;
 using SiofriaSoundboard.Utils;
 using System.ComponentModel;
-using System.IO;
-using System.IO.Compression;
-using System.Security.AccessControl;
-using System.Security.Principal;
-using System.Windows.Forms;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-using static System.Windows.Forms.DataFormats;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace SiofriaSoundboard
 {
     public partial class Form1 : Form
     {
         private InputManager inputManager;
-        private DictionaryBindingList<KeyPress, SoundClip> soundBindings;
         private KeyPress lastPress_color;
-
-        private string saveFilePath = "";
-        private const string lastSaveFileCache = "last_used_file.txt";
-        private const string exportPackageName = "SbPkg";
-        private const string audioDirName = "Audio";
-        private const string exportConfigName = "config.sbcfg";
-        private string exportAudioPath = Path.Combine(exportPackageName, audioDirName);
         private bool regKeyboardMessageShown = false;
+        private PackageManager packageMgr;
+        private string baseTitle = "";
 
+
+        //Form1 stuff
         public Form1()
         {
             InitializeComponent();
-            soundBindings = new DictionaryBindingList<KeyPress, SoundClip>();
-            dataGridView1.DataSource = soundBindings;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -48,9 +30,15 @@ namespace SiofriaSoundboard
             {
                 inputManager = new InputManager("blocked_input.txt", fileCheckTimer);
                 inputManager.OnInput += OnInput;
-                loadLastFile();
+
                 UpdateChecker.CheckForNewVersionAsync();
                 this.Text += " " + UpdateChecker.Tag;
+                baseTitle = this.Text;
+
+                packageMgr = new PackageManager();
+                packageMgr.LoadLast();
+                refreshDatagridAndPanels();
+
             }
             catch (Exception exc)
             {
@@ -60,21 +48,23 @@ namespace SiofriaSoundboard
             }
         }
 
-        private void loadLastFile()
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                string file = File.ReadLines(lastSaveFileCache).ElementAt<string>(0).Trim();
-                if (File.Exists(file))
-                {
-                    saveFilePath = file;
-                    LoadFile();
-                }
-            }
-            catch (Exception ex) { Log.Write(ex); }
+            var result = MessageBox.Show("Are you sure you want to exit?", "Exit? (reminder to save!)",
+                             MessageBoxButtons.YesNo,
+                             MessageBoxIcon.Question);
 
+            e.Cancel = (result == DialogResult.No);
+
+            if (result == DialogResult.Yes)
+            {
+                keepAliveTimer.Stop();
+                inputManager.StopAllInputProcesses();
+            }
         }
 
+
+        //Input Process comm and keepalive
         private void OnInput(int keycode)
         {
             KeyPress key = new KeyPress(keycode);
@@ -93,6 +83,7 @@ namespace SiofriaSoundboard
                 return;
             }
 
+            var soundBindings = packageMgr.Current.GetSoundBindings();
             if (!soundBindings.ContainsKey(key))
             {
                 soundBindings.Add(key, new SoundClip());
@@ -114,28 +105,6 @@ namespace SiofriaSoundboard
             ColorRowWithKey(key, dataGridView1.Rows[0].InheritedStyle.SelectionBackColor);
             OpenSoundSettings(key);
 
-        }
-
-
-        private AudioFileCfg getCurrentSettingWindow()
-        {
-            try
-            {
-                foreach (Component item in splitContainer1.Panel2.Controls)
-                {
-                    if (item is AudioFileCfg)
-                    {
-                        return ((AudioFileCfg)item);
-                    }
-                }
-                return null;
-            }
-            catch (Exception) { return null; }
-        }
-
-        private SoundClip getCurrentSettingWindowClip()
-        {
-            return getCurrentSettingWindow()?.GetSoundClip();
         }
 
         private void restartInputProcess()
@@ -176,66 +145,33 @@ namespace SiofriaSoundboard
             {
                 restartInputProcess();
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 Log.Write(exc);
                 MessageBox.Show("Something went wrong! The problem might resolve itself, but I advise restarting the application.");
             }
         }
 
-        private void status_strip_Click(object sender, EventArgs e)
+
+        //Gridview stuff
+        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (inputManager.InputProcessRunning())
-            {
-                inputManager.StopAllInputProcesses();
+            if (e.KeyCode != Keys.Delete)
                 return;
-            }
 
-            keepAliveTimer.Start();
-        }
+            MessageBox.Show("deleting");
+            getCurrentSettingWindow().Dispose();
+            SoundClip clip = (SoundClip)dataGridView1.SelectedRows[0].Cells[1].Value;
+            KeyPress key = (KeyPress)dataGridView1.SelectedRows[0].Cells[0].Value;
+            clip.Dispose();
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            var result = MessageBox.Show("Are you sure you want to exit?", "Exit? (reminder to save!)",
-                             MessageBoxButtons.YesNo,
-                             MessageBoxIcon.Question);
-
-            e.Cancel = (result == DialogResult.No);
-
-            if (result == DialogResult.Yes)
-            {
-                keepAliveTimer.Stop();
-                inputManager.StopAllInputProcesses();
-            }
-        }
-
-        private void fileCheckTimer_Tick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void OpenSoundSettings(KeyPress key)
-        {
-            try
-            {
-                SoundClip selected = soundBindings.GetValue(key);
-
-                splitContainer1.Panel2.Controls.Clear();
-                splitContainer1.Panel2.Controls.Add(new AudioFileCfg(selected));
-                splitContainer1.Panel2.Refresh();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Failed to open sound settings, check the logs!");
-                Log.Write(exc);
-            }
+            packageMgr.Current.GetSoundBindings().Remove(key);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-
                 KeyPress key = (KeyPress)dataGridView1.SelectedRows[0].Cells[0].Value;
                 if (lastPress_color != null && lastPress_color != key)
                 {
@@ -248,21 +184,15 @@ namespace SiofriaSoundboard
             catch { }
         }
 
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void refreshDatagridAndPanels()
         {
-
+            dataGridView1.DataSource = packageMgr.Current.GetSoundBindings();
+            splitContainer1.Panel2.Controls.Clear();
+            lastPress_color = null;
+            this.Text = baseTitle + " - " + packageMgr.GetCurrentPackageName();
         }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
+        //Color Gridview Elements
         private void ColorRowWithKey(KeyPress key, Color c)
         {
             foreach (DataGridViewRow row in dataGridView1.Rows)
@@ -271,273 +201,12 @@ namespace SiofriaSoundboard
                 {
                     row.Cells[0].Style.BackColor = c;
                     row.Cells[1].Style.BackColor = c;
-
                 }
                 else
                 {
                     row.Cells[0].Style.BackColor = dataGridView1.Rows[0].InheritedStyle.BackColor;
                     row.Cells[1].Style.BackColor = dataGridView1.Rows[0].InheritedStyle.BackColor;
                 }
-            }
-        }
-
-        private void alwaysOnOpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TopMost = !TopMost;
-        }
-
-        private void SaveAs()
-        {
-            saveFileDialog1.InitialDirectory = @"C:\";
-            saveFileDialog1.Title = "Save soundboard config file";
-            saveFileDialog1.DefaultExt = "sbcfg";
-            saveFileDialog1.Filter = "Soundboard config files (*.sbcfg)|*.sbcfg";
-            saveFileDialog1.RestoreDirectory = true;
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                saveFilePath = saveFileDialog1.FileName;
-                Save(saveFilePath);
-            }
-
-        }
-
-        private void Save(string file, bool export = false)
-        {
-            using (StreamWriter writer = new StreamWriter(file))
-            {
-                foreach (DataGridViewRow row in dataGridView1.Rows)
-                {
-                    KeyPress key = (KeyPress)row.Cells[0].Value;
-                    SoundClip clip = (SoundClip)row.Cells[1].Value;
-
-                    string json;
-                    if (export)
-                    {
-                        SoundClip clipClone = (SoundClip)clip.Clone();
-                        clipClone.Filepath = Path.Combine(exportAudioPath, Path.GetFileName(clipClone.Filepath));
-                        json = clipClone.DumpSoundClipInfo();
-                    }
-                    else
-                        json = clip.DumpSoundClipInfo();
-
-                    writer.WriteLine("[" + key.keycode.ToString() + "][" + key.ToString() + "]:" + json);
-                }
-            }
-        }
-
-        private void LoadFile()
-        {
-            try
-            {
-                foreach (string line in File.ReadLines(saveFilePath))
-                {
-                    int kyecode = Int32.Parse(line.Split("][")[0].Substring(1));
-                    KeyPress key = new KeyPress(kyecode);
-
-                    string clip_json = line.Split("]:")[1].Trim();
-                    SoundClip clip = JsonConvert.DeserializeObject<SoundClip>(clip_json);
-
-                    soundBindings.Add(key, clip);
-                }
-
-                using (StreamWriter writer = new StreamWriter(lastSaveFileCache))
-                {
-                    writer.Write(saveFilePath);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to load that file, check the logs! " + ex.Message);
-                Log.Write(ex);
-            }
-
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (saveFilePath.Length == 0)
-                SaveAs();
-            else
-                Save(saveFilePath);
-        }
-
-        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.InitialDirectory = @"C:\";
-            openFileDialog1.Title = "Load soundboard config file";
-            openFileDialog1.DefaultExt = "sbcfg";
-            openFileDialog1.Filter = "Soundboard config files (*.sbcfg)|*.sbcfg";
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                saveFilePath = openFileDialog1.FileName;
-                LoadFile();
-            }
-        }
-
-        private void cb_Play_CheckedChanged(object sender, EventArgs e)
-        {
-            cb_Play.ForeColor = cb_Play.Checked ? Color.DarkBlue : Color.DarkSlateGray;
-        }
-
-
-        private void CopyAllAudioFilesToExportDir(string path)
-        {
-            List<string> failedFiles = new List<string>();
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                SoundClip src = ((SoundClip)row.Cells[1].Value);
-                string clipSource = src.Filepath;
-
-                if (clipSource.Length == 0)
-                    continue;
-
-                if (!clipSource.Contains(".mp3") && !clipSource.Contains(".wav"))
-                    continue;
-
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                string clipDest = Path.Combine(path, Path.GetFileName(clipSource));
-
-                try
-                {
-                    File.Copy(clipSource, clipDest, true);
-                }
-                catch (Exception ex)
-                {
-                    Log.Write(ex);
-                    failedFiles.Add(src.ToString());
-                }
-            }
-
-            if (failedFiles.Count > 0)
-            {
-                MessageBox.Show("These files failed to export [check the logs]: \n" + String.Join(", ", failedFiles.ToArray()));
-            }
-        }
-
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            saveFileDialog1.InitialDirectory = @"C:\";
-            saveFileDialog1.Title = "Export soundboard package";
-            saveFileDialog1.DefaultExt = "zip";
-            saveFileDialog1.Filter = "Soundboard package archive (*.zip)|*.zip";
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                string exportDir = new FileInfo(saveFileDialog1.FileName).Directory.FullName;
-                string exportFile = saveFileDialog1.FileName;
-                string packagePath = Path.Combine(exportDir, exportPackageName);
-
-                try
-                {
-                    string packageAudioPath = Path.Combine(packagePath, audioDirName);
-                    CopyAllAudioFilesToExportDir(packageAudioPath);
-
-                    string packageConfig = Path.Combine(packagePath, exportConfigName);
-                    Save(packageConfig, true);
-
-                    ZipFile.CreateFromDirectory(packagePath, exportFile, CompressionLevel.Fastest, true);
-                    MessageBox.Show("Export Complete!\nYou will find your file at: " + exportFile);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Failed to copy all audio files to the package! Exported package might be unusable. Check the logs for more info about the error.\n" + ex.Message);
-                    Log.Write(ex);
-                }
-
-                try
-                {
-                    if (Directory.Exists(packagePath))
-                    {
-                        Directory.Delete(packagePath, true);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Write(ex);
-                }
-            }
-        }
-
-        public void RecurseReadOnlyFalse(DirectoryInfo directory)
-        {
-            foreach (FileInfo fi in directory.GetFiles())
-            {
-                fi.IsReadOnly = false; // or true
-                fi.Attributes = FileAttributes.Normal;
-            }
-
-            foreach (DirectoryInfo subdir in directory.GetDirectories())
-            {
-                RecurseReadOnlyFalse(subdir);
-            }
-        }
-
-        private void newFile()
-        {
-            if (soundBindings.Count > 0)
-            {
-                DialogResult dialogResult = MessageBox.Show("Do you want to save before creating a new file?", "Save?", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    if (saveFilePath.Length == 0)
-                        SaveAs();
-                    else
-                        Save(saveFilePath);
-                }
-            }
-
-            soundBindings.Clear();
-            soundBindings = new DictionaryBindingList<KeyPress, SoundClip>();
-            dataGridView1.DataSource = soundBindings;
-            saveFilePath = "";
-            splitContainer1.Panel2.Controls.Clear();
-            lastPress_color = null;
-        }
-
-        private void importToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            newFile();
-            string packageExtractionPath = new FileInfo(Application.ExecutablePath).Directory.FullName;
-
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.InitialDirectory = @"C:\";
-            openFileDialog1.Title = "Load soundboard package archive";
-            openFileDialog1.DefaultExt = "zip";
-            openFileDialog1.Filter = "Soundboard package archive (*.zip)|*.zip";
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                string packageArchive = openFileDialog1.FileName;
-                ZipFile.ExtractToDirectory(packageArchive, packageExtractionPath, true);
-
-                saveFilePath = Path.Combine(packageExtractionPath, exportPackageName, exportConfigName);
-                LoadFile();
-            }
-
-        }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            newFile();
-        }
-
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                splitContainer1.Panel2.Controls.Clear();
-                splitContainer1.Panel2.Controls.Add(new AboutMe());
-                splitContainer1.Panel2.Refresh();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("It seems there was an error opening the About me page\n...well...If that is the will of The Lake...so be it.");
-                Log.Write(exc);
             }
         }
 
@@ -554,9 +223,11 @@ namespace SiofriaSoundboard
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+
+        //Audio Controls Play/Stop
+        private void cb_Play_CheckedChanged(object sender, EventArgs e)
         {
-            SaveAs();
+            cb_Play.ForeColor = cb_Play.Checked ? Color.DarkBlue : Color.DarkSlateGray;
         }
 
         private void StopAll()
@@ -574,18 +245,116 @@ namespace SiofriaSoundboard
             StopAll();
         }
 
-        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode != Keys.Delete)
-                return;
 
-            MessageBox.Show("deleting");
-            getCurrentSettingWindow().Dispose();
-            SoundClip clip = (SoundClip)dataGridView1.SelectedRows[0].Cells[1].Value;
-            KeyPress key = (KeyPress)dataGridView1.SelectedRows[0].Cells[0].Value;
-            clip.Dispose();
-            
-            soundBindings.Remove(key);
+        //Sound Settings panel stuff
+        private AudioFileCfg getCurrentSettingWindow()
+        {
+            try
+            {
+                foreach (Component item in splitContainer1.Panel2.Controls)
+                {
+                    if (item is AudioFileCfg)
+                    {
+                        return ((AudioFileCfg)item);
+                    }
+                }
+                return null;
+            }
+            catch (Exception) { return null; }
         }
+
+        private void OpenSoundSettings(KeyPress key)
+        {
+            try
+            {
+
+                SoundClip selected = packageMgr.Current.GetSoundBindings().GetValue(key);
+
+                splitContainer1.Panel2.Controls.Clear();
+                splitContainer1.Panel2.Controls.Add(new AudioFileCfg(selected));
+                splitContainer1.Panel2.Refresh();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Failed to open sound settings, check the logs!");
+                Log.Write(exc);
+            }
+        }
+
+
+        //Status strip
+        private void status_strip_Click(object sender, EventArgs e)
+        {
+            if (inputManager.InputProcessRunning())
+            {
+                inputManager.StopAllInputProcesses();
+                return;
+            }
+
+            keepAliveTimer.Start();
+        }
+
+
+        //Strip Clicks
+        private void managePackagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Open Form with packages
+            //Open/Delete
+        }
+
+        private void importToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            packageMgr.Import();
+            refreshDatagridAndPanels();
+        }
+
+        private void exportToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            packageMgr.Export();
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            packageMgr.SaveAs();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            packageMgr.NewPackage();
+            refreshDatagridAndPanels();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            packageMgr.Save();
+        }
+
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            packageMgr.Load();
+            refreshDatagridAndPanels();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                splitContainer1.Panel2.Controls.Clear();
+                splitContainer1.Panel2.Controls.Add(new AboutMe());
+                splitContainer1.Panel2.Refresh();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("It seems there was an error opening the About me page\n...well...If that is the will of The Lake...so be it.");
+                Log.Write(exc);
+            }
+        }
+
+        private void alwaysOnOpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TopMost = !TopMost;
+        }
+
+
     }
 }
