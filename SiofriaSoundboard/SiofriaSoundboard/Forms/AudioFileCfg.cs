@@ -30,19 +30,24 @@ namespace SiofriaSoundboard
 
         public void ApplyValuesToSoundclip()
         {
-            clip.Volume = ((float)tracker_volume.Value) / 100.0f;
-            clip.CutRangeEnabled = cb_cut_enabled.Checked;
-            clip.FadeInEnabled = cb_fadein.Checked;
-            clip.FadeOutEnabled = cb_fadeout.Checked;
-            clip.Loop = cb_loop.Checked;
-            clip.Stream = cb_stream.Checked;
+            ApplyValuesToSoundclip(clip);
+        }
+
+        public void ApplyValuesToSoundclip(SoundClip soundClip)
+        {
+            soundClip.Volume = ((float)tracker_volume.Value) / 100.0f;
+            soundClip.CutRangeEnabled = cb_cut_enabled.Checked;
+            soundClip.FadeInEnabled = cb_fadein.Checked;
+            soundClip.FadeOutEnabled = cb_fadeout.Checked;
+            soundClip.Loop = cb_loop.Checked;
+            soundClip.Stream = cb_stream.Checked;
 
             try
             {
-                clip.CutRangeBegin = float.Parse(tb_start.Text);
-                clip.CutRangeTake = float.Parse(tb_end.Text);
-                clip.FadeInAmount = float.Parse(tb_fadein.Text);
-                clip.FadeOutAmount = float.Parse(tb_fadeout.Text);
+                soundClip.CutRangeBegin = float.Parse(tb_start.Text);
+                soundClip.CutRangeTake = float.Parse(tb_end.Text);
+                soundClip.FadeInAmount = float.Parse(tb_fadein.Text);
+                soundClip.FadeOutAmount = float.Parse(tb_fadeout.Text);
             }
             catch (Exception ex)
             {
@@ -164,6 +169,11 @@ namespace SiofriaSoundboard
                 e.Effect = DragDropEffects.Copy; // Okay
             else
                 e.Effect = DragDropEffects.None; // Unknown data, ignore it
+        }
+
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

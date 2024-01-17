@@ -59,6 +59,7 @@
             saveFileDialog1 = new SaveFileDialog();
             timercolor = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
+            applyToOtherSoundsToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -206,7 +207,7 @@
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnOpToolStripMenuItem, clearCacheToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnOpToolStripMenuItem, clearCacheToolStripMenuItem, applyToOtherSoundsToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             viewToolStripMenuItem.Size = new Size(46, 21);
             viewToolStripMenuItem.Text = "Tools";
@@ -214,14 +215,14 @@
             // alwaysOnOpToolStripMenuItem
             // 
             alwaysOnOpToolStripMenuItem.Name = "alwaysOnOpToolStripMenuItem";
-            alwaysOnOpToolStripMenuItem.Size = new Size(152, 22);
+            alwaysOnOpToolStripMenuItem.Size = new Size(191, 22);
             alwaysOnOpToolStripMenuItem.Text = "Always On Top";
             alwaysOnOpToolStripMenuItem.Click += alwaysOnOpToolStripMenuItem_Click;
             // 
             // clearCacheToolStripMenuItem
             // 
             clearCacheToolStripMenuItem.Name = "clearCacheToolStripMenuItem";
-            clearCacheToolStripMenuItem.Size = new Size(152, 22);
+            clearCacheToolStripMenuItem.Size = new Size(191, 22);
             clearCacheToolStripMenuItem.Text = "Clear Cache";
             clearCacheToolStripMenuItem.Click += clearCacheToolStripMenuItem_Click;
             // 
@@ -235,14 +236,14 @@
             // showAboutPageToolStripMenuItem
             // 
             showAboutPageToolStripMenuItem.Name = "showAboutPageToolStripMenuItem";
-            showAboutPageToolStripMenuItem.Size = new Size(180, 22);
+            showAboutPageToolStripMenuItem.Size = new Size(173, 22);
             showAboutPageToolStripMenuItem.Text = "Show About Page";
             showAboutPageToolStripMenuItem.Click += showAboutPageToolStripMenuItem_Click;
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            checkForUpdatesToolStripMenuItem.Size = new Size(180, 22);
+            checkForUpdatesToolStripMenuItem.Size = new Size(173, 22);
             checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
             checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
             // 
@@ -333,6 +334,13 @@
             timercolor.Enabled = true;
             timercolor.Tick += timercolor_Tick;
             // 
+            // applyToOtherSoundsToolStripMenuItem
+            // 
+            applyToOtherSoundsToolStripMenuItem.Name = "applyToOtherSoundsToolStripMenuItem";
+            applyToOtherSoundsToolStripMenuItem.Size = new Size(191, 22);
+            applyToOtherSoundsToolStripMenuItem.Text = "Apply to other sounds";
+            applyToOtherSoundsToolStripMenuItem.Click += applyToOtherSoundsToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -395,5 +403,6 @@
         private ToolStripMenuItem clearCacheToolStripMenuItem;
         private ToolStripMenuItem showAboutPageToolStripMenuItem;
         private ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private ToolStripMenuItem applyToOtherSoundsToolStripMenuItem;
     }
 }

@@ -40,6 +40,7 @@ namespace SiofriaSoundboard
                 packageMgr.LoadLast();
                 refreshDatagridAndPanels();
 
+                dataGridView1.MultiSelect = true;
             }
             catch (Exception exc)
             {
@@ -116,7 +117,11 @@ namespace SiofriaSoundboard
 
             dataGridView1.ClearSelection();
             lastPress_color = key;
-            ColorRowWithKey(key, dataGridView1.Rows[0].InheritedStyle.SelectionBackColor);
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+                if (row.Cells[0].Value.Equals(key))
+                    row.Selected = true;
+
             OpenSoundSettings(key);
 
         }
@@ -166,38 +171,48 @@ namespace SiofriaSoundboard
             }
         }
 
-
         //Gridview stuff
         private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Delete)
                 return;
 
-            SoundClip clip = (SoundClip)dataGridView1.SelectedRows[0].Cells[1].Value;
+            var rows = dataGridView1.SelectedRows;
+            for (int i = 0; i < rows.Count; i++)
+            {
+                SoundClip clip = (SoundClip)rows[i].Cells[1].Value;
 
-            DialogResult r = MessageBox.Show("Deleting " + clip, "Are you sure?", MessageBoxButtons.YesNo);
-            if (r == DialogResult.No)
-                return;
+                DialogResult r = MessageBox.Show("Deleting " + clip, "Are you sure?", MessageBoxButtons.YesNo);
+                if (r == DialogResult.No)
+                    return;
 
-            getCurrentSettingWindow().Dispose();
-            KeyPress key = (KeyPress)dataGridView1.SelectedRows[0].Cells[0].Value;
-            clip.Dispose();
+                try
+                {
+                    getCurrentSettingWindow().Dispose();
+                }
+                catch(Exception) { }
 
-            packageMgr.Current.GetSoundBindings().Remove(key);
+                KeyPress key = (KeyPress)rows[i].Cells[0].Value;
+                clip.Dispose();
+
+                packageMgr.Current.GetSoundBindings().Remove(key);
+            }
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                KeyPress key = (KeyPress)dataGridView1.SelectedRows[0].Cells[0].Value;
+                var rows = dataGridView1.SelectedRows;
+                KeyPress key = (KeyPress)(rows[rows.Count - 1].Cells[0].Value);
                 if (lastPress_color != null && lastPress_color != key)
                 {
                     ColorRowWithKey(lastPress_color, dataGridView1.Rows[0].InheritedStyle.BackColor);
                     lastPress_color = null;
                 }
 
-                OpenSoundSettings(key);
+                if(rows.Count == 1)
+                    OpenSoundSettings(key);
             }
             catch { }
         }
@@ -399,6 +414,22 @@ namespace SiofriaSoundboard
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateChecker.CheckForNewVersionAsync();
+        }
+
+        private void applyToOtherSoundsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var rows = dataGridView1.SelectedRows;
+                var soundControl = getCurrentSettingWindow();
+
+                for (int i = 0; i < rows.Count; i++)
+                {
+                    var clip = (SoundClip)rows[i].Cells[1].Value;
+                    soundControl.ApplyValuesToSoundclip(clip);
+                }
+            }
+            catch { }
         }
     }
 }
