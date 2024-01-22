@@ -1,4 +1,5 @@
 ﻿using SiofriaSoundboard.Packages;
+using SiofriaSoundboard.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,6 +59,21 @@ namespace SiofriaSoundboard.Forms
         {
             pkgMgr.LoadPackageByName((string)listBox1.SelectedItem);
             parent.refreshDatagridAndPanels();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string src = (string)listBox1.SelectedItem;
+
+            string dest = "";
+            DialogResult r = InputBox.Show("Give a new name to that package!", ref dest);
+            if (r == DialogResult.Cancel)
+                return;
+
+            pkgMgr.DuplicatePackage(src, dest);
+            listBox1.Items.Clear();
+            pkgMgr.GetPackageList().ForEach(pkg => listBox1.Items.Add(pkg));
+            MessageBox.Show("Package copied successfully!");
         }
     }
 }

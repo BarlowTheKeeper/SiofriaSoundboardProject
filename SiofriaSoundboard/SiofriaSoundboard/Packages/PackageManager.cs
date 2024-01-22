@@ -293,5 +293,30 @@ namespace SiofriaSoundboard.Packages
 
             Current = new SoundPackage(Path.Combine(packagesPath, name, exportConfigName));
         }
+
+        public void DuplicatePackage(string pkgName, string newPkgName)
+        {
+            if(pkgName.Length == 0 || newPkgName.Length == 0)
+            { return; }
+
+            string src = Path.Combine(packagesPath, pkgName);
+            string dest = Path.Combine(packagesPath, newPkgName);
+
+            try
+            {
+                FileUtils.CopyDirectory(src, dest, true);
+                string srcCfg = Path.Combine(src, exportConfigName);
+                string destCfg = Path.Combine(dest, exportConfigName);
+
+                string text = File.ReadAllText(srcCfg);
+                text = text.Replace("\\" + pkgName + "\\", "\\" + newPkgName + "\\");
+                File.WriteAllText(destCfg, text);
+            }
+            catch   (Exception ex) {
+
+                MessageBox.Show("Failed to duplicate package. New package might be unusable. Check the logs for more info about the error.\n" + ex.Message);
+                Log.Write(ex);
+            }
+        }
     }
 }

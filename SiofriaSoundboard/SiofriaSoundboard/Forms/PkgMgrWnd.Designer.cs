@@ -33,6 +33,7 @@
             button1 = new Button();
             button4 = new Button();
             button2 = new Button();
+            button3 = new Button();
             SuspendLayout();
             // 
             // label1
@@ -61,7 +62,7 @@
             button1.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
             button1.Location = new Point(14, 366);
             button1.Name = "button1";
-            button1.Size = new Size(134, 40);
+            button1.Size = new Size(102, 40);
             button1.TabIndex = 2;
             button1.Text = "Load";
             button1.UseVisualStyleBackColor = true;
@@ -89,10 +90,22 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // button3
+            // 
+            button3.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            button3.Location = new Point(122, 366);
+            button3.Name = "button3";
+            button3.Size = new Size(102, 40);
+            button3.TabIndex = 7;
+            button3.Text = "Duplicate";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // PkgMgrWnd
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button4);
             Controls.Add(button1);
@@ -111,5 +124,6 @@
         private Button button1;
         private Button button4;
         private Button button2;
+        private Button button3;
     }
 }
