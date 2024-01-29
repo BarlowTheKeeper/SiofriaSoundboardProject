@@ -28,8 +28,8 @@ namespace SiofriaSoundboard.Input
         public InputManager(string inputFilePath, System.Windows.Forms.Timer inputTimer)
         {
             this.inputFilePath = inputFilePath;
-            //if (!File.Exists(inputFilePath))
-            //    File.Create(inputFilePath);
+            if (!File.Exists(inputFilePath))
+                File.Create(inputFilePath);
 
             this.inputTimer = inputTimer;
             outputStream = new StreamWriter("hook_engine_log.txt");

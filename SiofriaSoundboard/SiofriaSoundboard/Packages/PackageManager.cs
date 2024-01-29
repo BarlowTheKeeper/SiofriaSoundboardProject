@@ -34,6 +34,9 @@ namespace SiofriaSoundboard.Packages
 
         public PackageManager()
         {
+            if(!Directory.Exists(packagesPath))
+                Directory.CreateDirectory(packagesPath);
+
             LoadLast();
             if (Current == null || !Current.Valid)
                 Current = new SoundPackage();
