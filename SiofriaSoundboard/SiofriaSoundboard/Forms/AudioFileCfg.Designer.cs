@@ -55,9 +55,9 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             button1 = new Button();
             tableLayoutPanel2 = new TableLayoutPanel();
-            toolTip1 = new ToolTip(components);
             groupBox4 = new GroupBox();
             cb_stream = new CheckBox();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)tracker_volume).BeginInit();
             groupBox1.SuspendLayout();
             gr_range.SuspendLayout();
@@ -89,7 +89,6 @@
             tracker_volume.Size = new Size(450, 45);
             tracker_volume.TabIndex = 1;
             tracker_volume.Value = 100;
-            tracker_volume.Scroll += tracker_volume_Scroll;
             // 
             // cb_fadeout
             // 
@@ -100,7 +99,6 @@
             cb_fadeout.TabIndex = 2;
             cb_fadeout.Text = "Fade Out";
             cb_fadeout.UseVisualStyleBackColor = true;
-            cb_fadeout.CheckedChanged += cb_fadeout_CheckedChanged;
             // 
             // cb_fadein
             // 
@@ -111,7 +109,6 @@
             cb_fadein.TabIndex = 3;
             cb_fadein.Text = "Fade In";
             cb_fadein.UseVisualStyleBackColor = true;
-            cb_fadein.CheckedChanged += cb_fadein_CheckedChanged;
             // 
             // bt_browse
             // 
@@ -138,7 +135,6 @@
             groupBox1.TabIndex = 6;
             groupBox1.TabStop = false;
             groupBox1.Text = "Fade";
-            groupBox1.Enter += groupBox1_Enter;
             // 
             // label4
             // 
@@ -166,7 +162,6 @@
             tb_fadeout.PlaceholderText = "100";
             tb_fadeout.Size = new Size(32, 23);
             tb_fadeout.TabIndex = 13;
-            tb_fadeout.TextChanged += tb_fadeout_TextChanged;
             // 
             // tb_fadein
             // 
@@ -176,7 +171,6 @@
             tb_fadein.PlaceholderText = "100";
             tb_fadein.Size = new Size(32, 23);
             tb_fadein.TabIndex = 10;
-            tb_fadein.TextChanged += tb_fadein_TextChanged;
             // 
             // gr_range
             // 
@@ -192,7 +186,6 @@
             gr_range.TabIndex = 7;
             gr_range.TabStop = false;
             gr_range.Text = "Cut range";
-            gr_range.Enter += groupBox2_Enter;
             // 
             // label2
             // 
@@ -221,7 +214,6 @@
             cb_cut_enabled.TabIndex = 2;
             cb_cut_enabled.Text = "Enable";
             cb_cut_enabled.UseVisualStyleBackColor = true;
-            cb_cut_enabled.CheckedChanged += cb_cut_enabled_CheckedChanged;
             // 
             // tb_end
             // 
@@ -231,7 +223,6 @@
             tb_end.PlaceholderText = "Take";
             tb_end.Size = new Size(48, 23);
             tb_end.TabIndex = 1;
-            tb_end.TextChanged += tb_end_TextChanged;
             // 
             // tb_start
             // 
@@ -241,7 +232,6 @@
             tb_start.PlaceholderText = "Skip";
             tb_start.Size = new Size(48, 23);
             tb_start.TabIndex = 0;
-            tb_start.TextChanged += tb_start_TextChanged;
             // 
             // lb_file
             // 
@@ -276,7 +266,6 @@
             groupBox2.Text = "File";
             groupBox2.DragDrop += groupBox2_DragDrop;
             groupBox2.DragEnter += groupBox2_DragEnter;
-            groupBox2.Enter += groupBox2_Enter_1;
             // 
             // groupBox3
             // 
@@ -319,7 +308,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(550, 419);
             tableLayoutPanel1.TabIndex = 11;
-            tableLayoutPanel1.Paint += tableLayoutPanel1_Paint_1;
             // 
             // tableLayoutPanel3
             // 
@@ -374,7 +362,6 @@
             groupBox4.TabIndex = 8;
             groupBox4.TabStop = false;
             groupBox4.Text = "Playback";
-            groupBox4.Enter += groupBox4_Enter;
             // 
             // cb_stream
             // 
@@ -387,7 +374,6 @@
             cb_stream.TabIndex = 1;
             cb_stream.Text = "Stream";
             cb_stream.UseVisualStyleBackColor = true;
-            cb_stream.CheckedChanged += cb_stream_CheckedChanged;
             // 
             // AudioFileCfg
             // 
@@ -395,6 +381,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonHighlight;
             Controls.Add(tableLayoutPanel1);
+            ImeMode = ImeMode.Off;
             Name = "AudioFileCfg";
             Size = new Size(550, 419);
             Load += AudioFileCfg_Load;

@@ -38,13 +38,18 @@
             fileToolStripMenuItem = new ToolStripMenuItem();
             newToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
-            importToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             saveAsToolStripMenuItem = new ToolStripMenuItem();
+            managePackagesToolStripMenuItem = new ToolStripMenuItem();
+            importToolStripMenuItem = new ToolStripMenuItem();
             exportToolStripMenuItem = new ToolStripMenuItem();
+            manageToolStripMenuItem = new ToolStripMenuItem();
             viewToolStripMenuItem = new ToolStripMenuItem();
             alwaysOnOpToolStripMenuItem = new ToolStripMenuItem();
+            clearCacheToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
+            showAboutPageToolStripMenuItem = new ToolStripMenuItem();
+            checkForUpdatesToolStripMenuItem = new ToolStripMenuItem();
             keepAliveTimer = new System.Windows.Forms.Timer(components);
             fileCheckTimer = new System.Windows.Forms.Timer(components);
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -54,6 +59,7 @@
             saveFileDialog1 = new SaveFileDialog();
             timercolor = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
+            applyToOtherSoundsToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -74,10 +80,6 @@
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add(dataGridView1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            splitContainer1.Panel2.Paint += splitContainer1_Panel2_Paint;
             splitContainer1.Size = new Size(793, 417);
             splitContainer1.SplitterDistance = 236;
             splitContainer1.TabIndex = 0;
@@ -136,11 +138,10 @@
             menuStrip1.Size = new Size(148, 25);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
-            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, loadToolStripMenuItem, importToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, exportToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, loadToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, managePackagesToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 21);
             fileToolStripMenuItem.Text = "File";
@@ -160,13 +161,6 @@
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += loadToolStripMenuItem_Click;
             // 
-            // importToolStripMenuItem
-            // 
-            importToolStripMenuItem.Name = "importToolStripMenuItem";
-            importToolStripMenuItem.Size = new Size(186, 22);
-            importToolStripMenuItem.Text = "Import";
-            importToolStripMenuItem.Click += importToolStripMenuItem_Click;
-            // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
@@ -183,33 +177,75 @@
             saveAsToolStripMenuItem.Text = "Save As";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
+            // managePackagesToolStripMenuItem
+            // 
+            managePackagesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { importToolStripMenuItem, exportToolStripMenuItem, manageToolStripMenuItem });
+            managePackagesToolStripMenuItem.Name = "managePackagesToolStripMenuItem";
+            managePackagesToolStripMenuItem.Size = new Size(186, 22);
+            managePackagesToolStripMenuItem.Text = "Packages";
+            // 
+            // importToolStripMenuItem
+            // 
+            importToolStripMenuItem.Name = "importToolStripMenuItem";
+            importToolStripMenuItem.Size = new Size(117, 22);
+            importToolStripMenuItem.Text = "Import";
+            importToolStripMenuItem.Click += importToolStripMenuItem_Click_1;
+            // 
             // exportToolStripMenuItem
             // 
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(186, 22);
+            exportToolStripMenuItem.Size = new Size(117, 22);
             exportToolStripMenuItem.Text = "Export";
-            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
+            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click_1;
+            // 
+            // manageToolStripMenuItem
+            // 
+            manageToolStripMenuItem.Name = "manageToolStripMenuItem";
+            manageToolStripMenuItem.Size = new Size(117, 22);
+            manageToolStripMenuItem.Text = "Manage";
+            manageToolStripMenuItem.Click += manageToolStripMenuItem_Click;
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnOpToolStripMenuItem });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alwaysOnOpToolStripMenuItem, clearCacheToolStripMenuItem, applyToOtherSoundsToolStripMenuItem });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(44, 21);
-            viewToolStripMenuItem.Text = "View";
+            viewToolStripMenuItem.Size = new Size(46, 21);
+            viewToolStripMenuItem.Text = "Tools";
             // 
             // alwaysOnOpToolStripMenuItem
             // 
             alwaysOnOpToolStripMenuItem.Name = "alwaysOnOpToolStripMenuItem";
-            alwaysOnOpToolStripMenuItem.Size = new Size(152, 22);
+            alwaysOnOpToolStripMenuItem.Size = new Size(191, 22);
             alwaysOnOpToolStripMenuItem.Text = "Always On Top";
             alwaysOnOpToolStripMenuItem.Click += alwaysOnOpToolStripMenuItem_Click;
             // 
+            // clearCacheToolStripMenuItem
+            // 
+            clearCacheToolStripMenuItem.Name = "clearCacheToolStripMenuItem";
+            clearCacheToolStripMenuItem.Size = new Size(191, 22);
+            clearCacheToolStripMenuItem.Text = "Clear Cache";
+            clearCacheToolStripMenuItem.Click += clearCacheToolStripMenuItem_Click;
+            // 
             // toolStripMenuItem1
             // 
+            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { showAboutPageToolStripMenuItem, checkForUpdatesToolStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(52, 21);
             toolStripMenuItem1.Text = "About";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+            // 
+            // showAboutPageToolStripMenuItem
+            // 
+            showAboutPageToolStripMenuItem.Name = "showAboutPageToolStripMenuItem";
+            showAboutPageToolStripMenuItem.Size = new Size(173, 22);
+            showAboutPageToolStripMenuItem.Text = "Show About Page";
+            showAboutPageToolStripMenuItem.Click += showAboutPageToolStripMenuItem_Click;
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            checkForUpdatesToolStripMenuItem.Size = new Size(173, 22);
+            checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
+            checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
             // 
             // keepAliveTimer
             // 
@@ -221,7 +257,6 @@
             // 
             fileCheckTimer.Enabled = true;
             fileCheckTimer.Interval = 200;
-            fileCheckTimer.Tick += fileCheckTimer_Tick;
             // 
             // tableLayoutPanel1
             // 
@@ -240,7 +275,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 4.44642162F));
             tableLayoutPanel1.Size = new Size(799, 469);
             tableLayoutPanel1.TabIndex = 2;
-            tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
             // 
             // tableLayoutPanel2
             // 
@@ -300,6 +334,13 @@
             timercolor.Enabled = true;
             timercolor.Tick += timercolor_Tick;
             // 
+            // applyToOtherSoundsToolStripMenuItem
+            // 
+            applyToOtherSoundsToolStripMenuItem.Name = "applyToOtherSoundsToolStripMenuItem";
+            applyToOtherSoundsToolStripMenuItem.Size = new Size(191, 22);
+            applyToOtherSoundsToolStripMenuItem.Text = "Apply to other sounds";
+            applyToOtherSoundsToolStripMenuItem.Click += applyToOtherSoundsToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -307,6 +348,7 @@
             ClientSize = new Size(799, 469);
             Controls.Add(tableLayoutPanel1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
             MainMenuStrip = menuStrip1;
             MaximizeBox = false;
             Name = "Form1";
@@ -314,6 +356,7 @@
             Text = "Siofria Soundboard";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
+            KeyDown += Form1_KeyDown;
             splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
@@ -348,12 +391,18 @@
         private SaveFileDialog saveFileDialog1;
         private TableLayoutPanel tableLayoutPanel2;
         private CheckBox cb_Play;
-        private ToolStripMenuItem exportToolStripMenuItem;
-        private ToolStripMenuItem importToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Timer timercolor;
         private Button button1;
         private ToolTip toolTip1;
+        private ToolStripMenuItem managePackagesToolStripMenuItem;
+        private ToolStripMenuItem manageToolStripMenuItem;
+        private ToolStripMenuItem importToolStripMenuItem;
+        private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripMenuItem clearCacheToolStripMenuItem;
+        private ToolStripMenuItem showAboutPageToolStripMenuItem;
+        private ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private ToolStripMenuItem applyToOtherSoundsToolStripMenuItem;
     }
 }

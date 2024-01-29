@@ -10,7 +10,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 namespace SiofriaSoundboard.Input
 {
     [JsonObject(MemberSerialization.OptIn)]
-    class KeyPress : IComparable<KeyPress>
+    public class KeyPress : IComparable<KeyPress>
     {
         private static Dictionary<int, string> keymap = new Dictionary<int, string>() //TODO: Can be its own lang config file
         {

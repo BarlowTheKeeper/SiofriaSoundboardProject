@@ -30,19 +30,24 @@ namespace SiofriaSoundboard
 
         public void ApplyValuesToSoundclip()
         {
-            clip.Volume = ((float)tracker_volume.Value) / 100.0f;
-            clip.CutRangeEnabled = cb_cut_enabled.Checked;
-            clip.FadeInEnabled = cb_fadein.Checked;
-            clip.FadeOutEnabled = cb_fadeout.Checked;
-            clip.Loop = cb_loop.Checked;
-            clip.Stream = cb_stream.Checked;
+            ApplyValuesToSoundclip(clip);
+        }
+
+        public void ApplyValuesToSoundclip(SoundClip soundClip)
+        {
+            soundClip.Volume = ((float)tracker_volume.Value) / 100.0f;
+            soundClip.CutRangeEnabled = cb_cut_enabled.Checked;
+            soundClip.FadeInEnabled = cb_fadein.Checked;
+            soundClip.FadeOutEnabled = cb_fadeout.Checked;
+            soundClip.Loop = cb_loop.Checked;
+            soundClip.Stream = cb_stream.Checked;
 
             try
             {
-                clip.CutRangeBegin = float.Parse(tb_start.Text);
-                clip.CutRangeTake = float.Parse(tb_end.Text);
-                clip.FadeInAmount = float.Parse(tb_fadein.Text);
-                clip.FadeOutAmount = float.Parse(tb_fadeout.Text);
+                soundClip.CutRangeBegin = float.Parse(tb_start.Text);
+                soundClip.CutRangeTake = float.Parse(tb_end.Text);
+                soundClip.FadeInAmount = float.Parse(tb_fadein.Text);
+                soundClip.FadeOutAmount = float.Parse(tb_fadeout.Text);
             }
             catch (Exception ex)
             {
@@ -91,69 +96,15 @@ namespace SiofriaSoundboard
             }
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             ApplyValuesToSoundclip();
         }
 
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void AudioFileCfg_Load(object sender, EventArgs e)
         {
             Show();
-        }
-
-        private void cb_fadein_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cb_fadeout_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_fadein_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_fadeout_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cb_cut_enabled_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_start_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tb_end_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tracker_volume_Scroll(object sender, EventArgs e)
-        {
-
         }
 
         private void bt_browse_Click(object sender, EventArgs e)
@@ -181,11 +132,6 @@ namespace SiofriaSoundboard
             if (clip.IsPlaying())
             { clip.Stop(); }
             else { clip.Play(); }
-        }
-
-        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
-        {
-
         }
 
         internal SoundClip GetSoundClip()
@@ -217,11 +163,6 @@ namespace SiofriaSoundboard
             }
         }
 
-        private void groupBox2_Enter_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void groupBox2_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -230,12 +171,7 @@ namespace SiofriaSoundboard
                 e.Effect = DragDropEffects.None; // Unknown data, ignore it
         }
 
-        private void groupBox4_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cb_stream_CheckedChanged(object sender, EventArgs e)
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
         {
 
         }
