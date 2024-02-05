@@ -47,7 +47,10 @@ namespace SiofriaSoundboard.Network
                 {
                     String repoRelease = release["tag_name"].ToString();
                     if (CheckRepoVersionBigger(repoRelease))
+                    {
                         MessageBox.Show("New version " + repoRelease + " available on Github!\n Visit: https://github.com/BarlowTheKeeper/SiofriaSoundboardProject/releases to download it.");
+                        return;
+                    }
                 }
             }
             catch (HttpRequestException e)
