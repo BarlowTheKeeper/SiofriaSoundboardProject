@@ -11,14 +11,16 @@ namespace SiofriaSoundboard.Network
 {
     class UpdateChecker
     {
-        private static readonly String tag = "v0.0.4";
+        private static readonly String tag = "v0.0.5";
         private static readonly HttpClient client = new HttpClient();
-        public static String Tag { get; } = "v0.0.4";
+        public static String Tag { get; } = "v0.0.5";
 
         private static bool CheckRepoVersionBigger(String repoVersion)
         {
             string version1 = Tag.Substring(1);
-            string version2 = repoVersion.Substring(1);
+            string version2 = repoVersion;
+            if (repoVersion.StartsWith("v"))
+                version2 = repoVersion.Substring(1);
 
             // Create Version objects
             Version v1 = new Version(version1);
@@ -53,7 +55,7 @@ namespace SiofriaSoundboard.Network
                     }
                 }
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
                 Utils.Log.Write(e.Message);
             }
