@@ -18,9 +18,7 @@ namespace SiofriaSoundboard.Network
         private static bool CheckRepoVersionBigger(String repoVersion)
         {
             string version1 = Tag.Substring(1);
-            string version2 = repoVersion;
-            if (repoVersion.StartsWith("v"))
-                version2 = repoVersion.Substring(1);
+            string version2 = repoVersion.Substring(1);
 
             // Create Version objects
             Version v1 = new Version(version1);
@@ -52,7 +50,7 @@ namespace SiofriaSoundboard.Network
                         MessageBox.Show("New version " + repoRelease + " available on Github!\n Visit: https://github.com/BarlowTheKeeper/SiofriaSoundboardProject/releases to download it.");
                 }
             }
-            catch (Exception e)
+            catch (HttpRequestException e)
             {
                 Utils.Log.Write(e.Message);
             }
