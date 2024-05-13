@@ -39,7 +39,7 @@ SectionEnd
 
 Section "Install SiofriaSoundboard"
     SetOutPath $INSTDIR
-    File /r "..\SiofriaSoundboard\SiofriaSoundboard\bin\Debug\SoundboardOfSiofria\*.*"
+    File /r "..\SiofriaSoundboard\SiofriaSoundboard\bin\Release\SoundboardOfSiofria\*.*"
     WriteUninstaller "$INSTDIR\SiofriaUninstall.exe"
 
 SectionEnd
